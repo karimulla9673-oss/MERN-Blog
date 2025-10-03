@@ -39,11 +39,11 @@ app.use("/api/v1/comment", commentRoute);
 
 // ===== React Frontend (only if serving frontend from backend) =====
 // In your case frontend is on Render Static Site, so this part is optional
-const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, "/frontend/dist")));
-app.get("*", (_, res) => {
-  res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-});
+//const __dirname = path.resolve();
+//app.use(express.static(path.join(__dirname, "/frontend/dist")));
+//app.get("*", (_, res) => {
+  //res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+//});
 
 // ===== Start Server =====
 app.listen(PORT, () => {
