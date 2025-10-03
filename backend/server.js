@@ -50,3 +50,5 @@ app.listen(PORT, () => {
   console.log(`✅ Server listening on port ${PORT}`);
   connectDB();
 });
+
+// Updated CORS config
