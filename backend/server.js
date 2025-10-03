@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
 app.use(cors({
-  origin: ["http://localhost:5173"], // allow both local + deployed frontend
+  origin: ["https://mern-blog-1-bkmw.onrender.com"], // allow both local + deployed frontend
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
