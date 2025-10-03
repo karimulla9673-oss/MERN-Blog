@@ -21,30 +21,48 @@ const CreateBlog = () => {
     const getSelectedCategory = (value) => {
         setCategory(value)
     }
-    const createBlogHandler = async () => {
+  const createBlogHandler = async () => {
+    try {
+        setLoading(true)
         
-        try {
-            setLoading(true)
-            const res = await axios.post(`https://mern-blog-3psk.onrender.com/api/v1/blog/`, { title, category }, {
+        // ✅ Get token from localStorage
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+            toast.error('Please login first');
+            navigate('/login');
+            return;
+        }
+        
+        const res = await axios.post(
+            `https://mern-blog-3psk.onrender.com/api/v1/blog/`, 
+            { title, category }, 
+            {
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}` // ✅ ADD THIS
                 },
                 withCredentials: true,
-            })
-            if (res.data.success) {
-                dispatch(setBlog([...blog, res.data.blog]))
-                navigate(`/dashboard/write-blog/${res.data.blog._id}`)
-                toast.success(res.data.message)
-            } else {
-                toast.error("Something went wrong");
             }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setLoading(false)
+        )
+        
+        if (res.data.success) {
+            dispatch(setBlog([...blog, res.data.blog]))
+            navigate(`/dashboard/write-blog/${res.data.blog._id}`)
+            toast.success(res.data.message)
+        } else {
+            toast.error("Something went wrong");
         }
-
+    } catch (error) {
+        console.log(error)
+        if (error.response?.status === 401) {
+            toast.error('Session expired. Please login again');
+            navigate('/login');
+        }
+    } finally {
+        setLoading(false)
     }
+}
     return (
         <div className='p-4 md:pr-20 h-screen md:ml-[320px] pt-20'>
             <Card className="md:p-10 p-4 dark:bg-gray-800">

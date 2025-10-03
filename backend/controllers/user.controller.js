@@ -93,9 +93,20 @@ export const login = async(req, res) => {
         }
         
         const token = await jwt.sign({userId:user._id}, process.env.SECRET_KEY, { expiresIn: '1d' })
-        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: "strict" }).json({
+        
+        // ✅ Update cookie settings for cross-origin
+        res.cookie("token", token, { 
+            maxAge: 1 * 24 * 60 * 60 * 1000, 
+            httpOnly: true, 
+            sameSite: "none",  // Changed from "strict"
+            secure: true       // Required when sameSite is "none"
+        })
+        
+        // ✅ Return token in response body
+        return res.status(200).json({
             success:true,
             message:`Welcome back ${user.firstName}`,
+            token: token,  // ✅ ADD THIS LINE
             user
         })
     } catch (error) {
@@ -105,7 +116,6 @@ export const login = async(req, res) => {
             message: "Failed to Login",           
         })
     }
-  
 }
 
 export const logout = async (_, res) => {

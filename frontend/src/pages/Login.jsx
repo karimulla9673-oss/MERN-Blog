@@ -39,32 +39,32 @@ const Login = () => {
         withCredentials: true
       });
       if (response.data.success) {
-        navigate('/')
+        // ✅ Store token in localStorage
+        localStorage.setItem('token', response.data.token);
+        
+        // Store user data
         dispatch(setUser(response.data.user))
+        
         toast.success(response.data.message)
+        navigate('/')
       }
     } catch (error) {
         console.error('Full error:', error);
-  console.error('Error response:', error.response);
-  
-  if (error.response) {
-    // Server responded with error status
-    console.error('Server error data:', error.response.data);
-    console.error('Status code:', error.response.status);
-    toast.error(error.response.data.message || 'Failed to Login');
-  } else if (error.request) {
-    // Request made but no response
-    console.error('No response received');
-    toast.error('No response from server');
-  } else {
-    // Something else happened
-    console.error('Error:', error.message);
-    toast.error('Failed to Login');
-  }
-
+        console.error('Error response:', error.response);
+      
+        if (error.response) {
+          console.error('Server error data:', error.response.data);
+          console.error('Status code:', error.response.status);
+          toast.error(error.response.data.message || 'Failed to Login');
+        } else if (error.request) {
+          console.error('No response received');
+          toast.error('No response from server');
+        } else {
+          console.error('Error:', error.message);
+          toast.error('Failed to Login');
+        }
     }
-
-  };
+};
   const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="flex items-center h-screen md:pt-14 md:h-[760px] ">

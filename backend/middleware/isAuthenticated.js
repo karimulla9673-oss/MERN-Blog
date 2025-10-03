@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken"
 
 export const isAuthenticated = async (req, res, next) => {
     try {
-        // Try to get token from cookie first, then from Authorization header
+        // Try cookie first
         let token = req.cookies.token;
         
         // If no cookie, check Authorization header
@@ -31,5 +31,9 @@ export const isAuthenticated = async (req, res, next) => {
         next();
     } catch (error) {
         console.log(error);
+        return res.status(401).json({
+            message:"Authentication failed",
+            success:false,
+        })
     }
 }
